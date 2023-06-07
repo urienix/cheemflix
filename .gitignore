@@ -1,0 +1,14 @@
+/.env
+/dist
+/logs
+/node_modules
+/.vscode
+.npmrc
+yarn-error.log
+yarn.lock
+tmux-client-*.log
+/*.rsa
+/*.pub
+/*.pem
+/*.key
+/docs.zip

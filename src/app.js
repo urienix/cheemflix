@@ -7,7 +7,13 @@ import cookieParser from 'cookie-parser';
 
 import mainRoute from './routes/main.routes';
 
+import { createAdmin } from './libs/createAdmin';
+
+import './controllers/connection'; // Database connection
+
 const app = express();
+
+createAdmin();
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));

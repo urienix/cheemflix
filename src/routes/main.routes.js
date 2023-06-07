@@ -1,18 +1,16 @@
 import { Router } from 'express';
 
+import authRoutes from './auth.routes';
+
 const router = Router();
 
+
 router
+
+    .use(authRoutes)
+
     .get('/', async (req, res) => {
-        return res.render('template');
-    })
-
-    .get('/login', async (req, res) => {
-        return res.render('auth/login');
-    })
-
-    .get('/register', async (req, res) => {
-        return res.render('auth/register');
+        return res.redirect('/login');
     })
 
     .get('/error', async (req, res) => {

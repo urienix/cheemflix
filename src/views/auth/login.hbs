@@ -18,24 +18,12 @@
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text">
-                          <i class="material-icons">face</i>
-                        </span>
-                      </div>
-                      <input type="text" class="form-control" placeholder="Usuario">
-                    </div>
-                  </span>
-                  {{#notRender}}
-                  <span class="md-form-group">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
                           <i class="material-icons">email</i>
                         </span>
                       </div>
-                      <input type="email" class="form-control" placeholder="Email...">
+                      <input type="email" class="form-control" placeholder="Correo" id="emailInput">
                     </div>
                   </span>
-                  {{/notRender}}
                   <span class="md-form-group">
                     <div class="input-group">
                       <div class="input-group-prepend">
@@ -43,20 +31,20 @@
                           <i class="material-icons">lock_outline</i>
                         </span>
                       </div>
-                      <input type="password" class="form-control" placeholder="Contraseña">
+                      <input type="password" class="form-control" placeholder="Contraseña" id="passwordInput">
                     </div>
                   </span>
                   <div class="mt-4 pl-3">
                     <div class="form-check">
                       <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" id="remember"> Mantener sesión iniciada
+                        <input class="form-check-input" type="checkbox" id="rememberCheck"> Mantener sesión iniciada
                         <span class="form-check-sign"><span class="check"></span></span>
                       </label>
                     </div>
                   </div>
                 </div>
                 <div class="card-footer justify-content-center">
-                  <a href="javascript:;" class="btn btn-warning text-dark" style="filter: invert(1); font-size: 14px">Ingresar</a>
+                  <button type="submit" class="btn btn-warning text-dark" style="filter: invert(1); font-size: 14px" id="loginButton">Ingresar</button>
                 </div>
               </div>
             </form>
@@ -88,4 +76,5 @@
       }, 700);
     }
   </script>
+  <script src="/js/controls/login.js"></script>
 </body>

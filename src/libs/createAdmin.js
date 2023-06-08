@@ -8,7 +8,7 @@ export const createAdmin = async () => {
         if (!user) {
             user = new User({
                 fullname: 'Administrador',
-                email: 'admin',
+                email: 'admin@cheemflix.com',
                 password: config.ADMIN_PASSWORD,
                 role: 'admin'
             });

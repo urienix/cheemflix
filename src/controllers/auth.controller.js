@@ -2,6 +2,7 @@ import User from "../models/user";
 import Session from "../models/session";
 import ms from "ms";
 import { createAccessToken, createSessionToken, verifySessionToken } from "../middlewares/jwtoken";
+import config from "../config/config";
 import logger from "../utils/logger";
 
 import { sendMail, buildMailTemplate } from "../utils/sendMail";
@@ -16,7 +17,8 @@ export let login = async function (email, password, remember) {
             fullname: 1,
             password: 1,
             role: 1,
-            active: 1
+            active: 1,
+            verified: 1
         });
         if (!result) {
             return {
@@ -121,6 +123,7 @@ export let register = async (req, res) => {
             message: "Se ha enviado un correo electrónico para verificar tu cuenta."
         });
     } catch (error) {
+        console.log(error);
         logger.error(error);
         return res.status(500).send({
             ok: false,
@@ -128,5 +131,25 @@ export let register = async (req, res) => {
             title: "Error desconocido",
             message: "Se ha producido un error desconocido, por favor intenta de nuevo más tarde."
         });        
+    }
+}
+
+
+export let verify = async (req, res) => {
+    let { userId } = req.params;
+    try {
+        let user = await User.findById(userId);
+        if(!user) {
+            return res.render('others/message', { title: 'Enlace inválido', message: 'Parece que el enlace ya no es válido', type:'danger', link: `${config.HOST_DOMAIN}/login`, linkText: 'Volver al login'});
+        }
+        if(user.verified) {
+            return res.render('others/message', { title: 'Cuenta ya verificada', message: 'La cuenta ya se encuentra verificada, puedes iniciar sesión', type:'success', link: `${config.HOST_DOMAIN}/login`, linkText: 'Ir al login'});
+        }
+        user.verified = true;
+        await user.save();
+        return res.render('others/message', { title: 'Cuenta verificada', message: 'La cuenta ha sido verificada, puedes iniciar sesión', type:'success', link: `${config.HOST_DOMAIN}/login`, linkText: 'Ir al login'});           
+    } catch (error) {
+        logger.error(error);
+        return res.render('others/message', { title: 'Error desconocido', message: 'Se ha producido un error desconocido, por favor intenta de nuevo más tarde.', type:'danger', link: `${config.HOST_DOMAIN}/login`, linkText: 'Volver al login'});        
     }
 }

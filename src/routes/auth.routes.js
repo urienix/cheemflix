@@ -1,8 +1,9 @@
 import { Router } from 'express';
 
-import { login, register } from "../controllers/auth.controller";
-import { body, validationResult } from "express-validator";
+import { login, register, verify } from "../controllers/auth.controller";
+import { body, param, validationResult } from "express-validator";
 import ms from 'ms';
+import config from '../config/config';
 
 
 const router = Router();
@@ -82,5 +83,16 @@ router
         return next();
     }, register)
 
+    .get('/verify/:userId', [
+        param('userId')
+            .not().isEmpty().withMessage('Identificador de usuario requerido')
+            .isMongoId().withMessage('Enlace de usuario invalido')
+    ], (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.render('others/message', { title: 'Enlace inválido', message: 'Parece que el enlace ya no es válido', type:'danger', link: `${config.HOST_DOMAIN}/login`, linkText: 'Volver al login'});
+        }
+        return next();
+    }, verify)
 
 export default router;

@@ -15,23 +15,12 @@ router
         return res.redirect('/login');
     })
 
-    .get('/home', checkSessionView, async (req, res) => {
-        const { user } = req;
-        if(user.role === 'admin') {
-            return res.redirect('/admin/movies');
-        }else {
-            return res.redirect('/movies');
-        }
-    })
-
-    .get('/admin/movies', checkSessionView, refreshAccessTokenView, async (req, res) => {
-        const { user } = req;
-        return res.render('admin/movies', { user });
+    .get('/admin/home', checkSessionView, refreshAccessTokenView, async (req, res) => {
+        return res.render('admin/movies');
     })
 
     .get('/movies', checkSessionView, refreshAccessTokenView, async (req, res) => {
-        const { user } = req;
-        return res.render('client/movies', { user });
+        return res.render('client/movies');
     })
 
     .get('/error', async (req, res) => {

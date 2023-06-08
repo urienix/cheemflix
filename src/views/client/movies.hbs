@@ -1,0 +1,79 @@
+<body class="dark-edition">
+  <div class="wrapper ">
+    {{>sidebar}}
+    <div class="main-panel">
+      {{>navtop}}
+      <div class="content">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-success card-header-icon pb-2">
+                    <div class="card-icon">
+                      <i class="material-icons">movies</i>
+                    </div>
+                    <h3 class="card-title">Catálogo de películas</h3>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="card card-product" data-count="10">
+                  <div class="card-header card-header-image" data-header-animation="false">
+                    <a href="#">
+                      <img class="img" src="/img/cheemsfino.png">
+                      <div class="play-button">
+                        <i class="material-icons">play_arrow</i>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <div class="card-actions text-center">
+                      {{#notRender}}
+                      <button type="button" class="btn text-default btn-link" data-toggle="tooltip"
+                        data-placement="bottom" title="" data-original-title="View" aria-describedby="tooltip806599">
+                        <i class="material-icons">play_arrow</i>
+                      </button>
+                      <button type="button" class="btn text-success btn-link" data-toggle="tooltip"
+                        data-placement="bottom" title="" data-original-title="Edit">
+                        <i class="material-icons">edit</i>
+                      </button>
+                      <button type="button" class="btn text-danger btn-link" data-toggle="tooltip"
+                        data-placement="bottom" title="" data-original-title="Remove">
+                        <i class="material-icons">close</i>
+                      </button>
+                      {{/notRender}}
+                    </div>
+                    <h4 class="card-title">
+                      <a href="javascript:;">Leon Fino</a>
+                    </h4>
+                    <div class="card-description">
+                      En esta ocasión, cheems se embarca en una aventura a todo dar en la selva de concreto.
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <p class="card-category"><i class="material-icons">timer</i> 23 Min.</p>
+                    </div>
+                    <div class="stats">
+                      <p class="card-category"><i class="material-icons">category</i> Comedia, Drama</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{>footer}}
+    </div>
+  </div>
+
+  {{>corescripts}}
+
+  <script src="/js/plugins/sweetalert2.js"></script>
+
+</body>
+
+</html>

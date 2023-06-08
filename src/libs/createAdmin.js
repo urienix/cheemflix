@@ -10,7 +10,8 @@ export const createAdmin = async () => {
                 fullname: 'Administrador',
                 email: 'admin@cheemflix.com',
                 password: config.ADMIN_PASSWORD,
-                role: 'admin'
+                role: 'admin',
+                verified: true
             });
 
             user.password = await user.encryptPassword(user.password);

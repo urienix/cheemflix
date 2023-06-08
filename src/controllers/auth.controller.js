@@ -4,6 +4,8 @@ import ms from "ms";
 import { createAccessToken, createSessionToken, verifySessionToken } from "../middlewares/jwtoken";
 import logger from "../utils/logger";
 
+import { sendMail, buildMailTemplate } from "../utils/sendMail";
+
 // requestedFrom is used to know if the request is from api or web, only have two posible values: api or web
 export let login = async function (email, password, remember) {
     try {
@@ -30,6 +32,14 @@ export let login = async function (email, password, remember) {
                 type: 'error',
                 title: "Cuenta deshabilitada",
                 message: "La cuenta no tiene permisos para iniciar sesión"
+            };
+        }
+        if(!result.verified) {
+            return {
+                ok: false,
+                type: 'error',
+                title: "Cuenta no verificada",
+                message: "La cuenta no ha sido verificada, por favor revisa tu correo electrónico"
             };
         }
         if (!(await result.matchPassword(password))) {
@@ -71,5 +81,52 @@ export let login = async function (email, password, remember) {
             title: "Error desconocido",
             message: "Se ha producido un error desconocido, por favor intenta de nuevo más tarde."
         };
+    }
+}
+
+export let register = async (req, res) => {
+    try {
+        const { fullname, email, password, repassword } = req.body;
+        if (password !== repassword) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Contraseñas no coinciden",
+                message: "Las contraseñas no coinciden, por favor verifica e intenta de nuevo."
+            });
+        }
+        let user = await User.findOne({
+            email
+        });
+        if (user) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Email ya registrado",
+                message: "El email ya se encuentra registrado, por favor intenta con otro."
+            });
+        }
+        user = new User({
+            fullname,
+            email,
+            password
+        })
+        user.password = await user.encryptPassword(password);
+        await user.save();
+        let link = `${config.HOST_DOMAIN}/verify/${user._id.toString()}`;
+        sendMail(email, "Verifica tu cuenta de CheemFlix", buildMailTemplate(fullname, link));
+        return res.status(200).send({
+            type: 'success',
+            title: "Registro exitoso",
+            message: "Se ha enviado un correo electrónico para verificar tu cuenta."
+        });
+    } catch (error) {
+        logger.error(error);
+        return res.status(500).send({
+            ok: false,
+            type: 'error',
+            title: "Error desconocido",
+            message: "Se ha producido un error desconocido, por favor intenta de nuevo más tarde."
+        });        
     }
 }

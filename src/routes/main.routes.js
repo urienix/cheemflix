@@ -1,8 +1,10 @@
 import { Router } from 'express';
 
 import authRoutes from './auth.routes';
+import errorRoutes from './error.routes';
 
 import { checkSessionView, refreshAccessTokenView } from "../middlewares/jwtoken";
+import { checkIfUserRolIsAllowed } from "../middlewares/others";
 
 const router = Router();
 
@@ -10,6 +12,7 @@ const router = Router();
 router
 
     .use(authRoutes)
+    .use(errorRoutes)
 
     .get('/', async (req, res) => {
         return res.redirect('/login');
@@ -24,7 +27,7 @@ router
         }
     })
 
-    .get('/admin/movies', checkSessionView, refreshAccessTokenView, async (req, res) => {
+    .get('/admin/movies', checkSessionView, refreshAccessTokenView, checkIfUserRolIsAllowed(['admin']), async (req, res) => {
         const { user } = req;
         return res.render('admin/movies', { user });
     })
@@ -32,10 +35,6 @@ router
     .get('/movies', checkSessionView, refreshAccessTokenView, async (req, res) => {
         const { user } = req;
         return res.render('client/movies', { user });
-    })
-
-    .get('/error', async (req, res) => {
-        return res.render('errors/error');
     })
 
 export default router;

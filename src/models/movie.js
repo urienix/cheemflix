@@ -16,7 +16,10 @@ let MovieSchema = new Schema({
     }],
     cast: [String],
     duration: Number, // In minutes
-    rating: Number,
+    rating: {
+        type: Number,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now()

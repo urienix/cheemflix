@@ -1,0 +1,83 @@
+<script src="https://www.youtube.com/iframe_api"></script>
+<body class="dark-edition">
+  <div class="wrapper ">
+    {{>sidebar}}
+    <div class="main-panel">
+      {{>navtop}}
+      <div class="content">
+        <div class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header card-header-success card-header-icon pb-2">
+                    <div class="card-icon">
+                      <i class="material-icons">movies</i>
+                    </div>
+                    <h3 class="card-title">{{movie.title}}</h3>
+                    <input type="hidden" id="videoLink" value="{{movie.link}}">
+                  </div>
+                  <div class="card-body">
+                    <div class="w-100 text-center">
+                        <div id="player"></div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h3>INFORMACIÓN</h3>
+                            <hr class="bg-white">                            
+                            <p><span class="font-weight-bold">Sinopsis: </span> {{movie.sinopsis}}</p>
+                            <p><span class="font-weight-bold">Categoría: </span> {{#each movie.categories}} {{name}} {{/each}}</p>
+                            <p><span class="font-weight-bold">Idioma: </span> {{movie.language}}</p>
+                            <p><span class="font-weight-bold">Actores: </span> {{#each movie.cast}} {{this}} {{/each}}</p>
+                            <p><span class="font-weight-bold">Clasificación: </span> {{#if movie.allowKids}}<span class="badge badge-success">Todo publico</span>{{else}}<span class="badge badge-warning">Adultos</span>{{/if}}</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{>footer}}
+    </div>
+  </div>
+
+  {{>corescripts}}
+
+  <script src="/js/plugins/sweetalert2.js"></script>
+  <script>
+    // Crea un reproductor de YouTube después de que se haya cargado la API
+    function onYouTubeIframeAPIReady() {
+        let video_id = obtenerIdVideoYoutube(document.getElementById('videoLink').value);
+        console.log(video_id);
+        new YT.Player('player', {
+          height: '780',
+          width: '1260',
+          videoId: `${video_id}`,
+          playerVars: {
+            autoplay: 1, // Reproducción automática
+          },
+        });
+    }
+
+    function obtenerIdVideoYoutube(enlace) {
+      // Patrones de URL de YouTube
+        let patrones = [
+            /(?:https?:\/\/(?:www\.)?)?youtu\.be\/([\w-]+)/,
+            /(?:https?:\/\/(?:www\.)?)?youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=)([\w-]+)/,
+            /^([\w-]+)$/
+        ];
+
+        for (var i = 0; i < patrones.length; i++) {
+            let coincidencia = enlace.match(patrones[i]);
+            if (coincidencia) {
+                return coincidencia[1];
+            }
+        }
+        return null; // No se encontró un ID de video válido
+    }
+
+  </script>
+
+</body>

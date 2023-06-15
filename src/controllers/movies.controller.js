@@ -76,3 +76,13 @@ export const getMoviesList = async (isKid) => {
         return [];
     }
 }
+
+export const getMovieById = async (movieId) => {
+    try{
+        const movie = await Movie.findById(movieId).populate('categories').lean();
+        return movie;
+    } catch (error) {
+        logger.error(error);
+        return null;
+    }
+}

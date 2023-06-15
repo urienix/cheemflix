@@ -15,7 +15,8 @@ export const checkIfUserHaveSelectedProfile = async (req, res, next) => {
     req.profile = {
         profileId: profile._id,
         name: profile.name,
-        avatar: profile.avatar
+        avatar: profile.avatar,
+        isKid: profile.type == 'kid'
     };
     return next();
 }

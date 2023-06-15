@@ -18,11 +18,12 @@
                 </div>
               </div>
 
+              {{#each movies}}
               <div class="col-md-4">
                 <div class="card card-product" data-count="10">
                   <div class="card-header card-header-image" data-header-animation="false">
-                    <a href="#">
-                      <img class="img" src="/img/cheemsfino.png">
+                    <a href="/movies/{{_id}}">
+                      <img class="img" src="{{image}}">
                       <div class="play-button">
                         <i class="material-icons">play_arrow</i>
                       </div>
@@ -46,22 +47,31 @@
                       {{/notRender}}
                     </div>
                     <h4 class="card-title">
-                      <a href="javascript:;">Leon Fino</a>
+                      <a href="javascript:;">{{title}}</a>
                     </h4>
                     <div class="card-description">
-                      En esta ocasión, cheems se embarca en una aventura a todo dar en la selva de concreto.
+                      {{sinopsis}}
+                    </div>
+                    <div class="w-100 text-center mt-4">
+                      {{#if allowKids}}
+                      <div class="badge badge-success">Todo publico</div>
+                      {{else}}
+                      <div class="badge badge-warning">Adultos</div>
+                      {{/if}}
                     </div>
                   </div>
                   <div class="card-footer">
                     <div class="stats">
-                      <p class="card-category"><i class="material-icons">timer</i> 23 Min.</p>
+                      <p class="card-category"><i class="material-icons">timer</i> {{duration}} Min.</p>
                     </div>
                     <div class="stats">
-                      <p class="card-category"><i class="material-icons">category</i> Comedia, Drama</p>
+                      <p class="card-category"><i class="material-icons">category</i> {{#each categories}}{{name}}, {{/each}}</p>
                     </div>
                   </div>
                 </div>
               </div>
+              {{/each}}
+
             </div>
           </div>
         </div>

@@ -22708,3 +22708,16 @@ h2.title {
 .avatar-selection:hover{
   box-shadow: aquamarine 0px 0px 10px;
 }
+
+.profile-selection{
+  height: 160px;
+  object-fit: scale-down;
+}
+
+.profile-selection:hover{
+  box-shadow: aquamarine 0px 0px 10px;
+}
+
+.profile-selection-text:hover{
+  box-shadow: aquamarine 0px 0px 10px;
+}

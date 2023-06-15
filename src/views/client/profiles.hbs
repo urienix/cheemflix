@@ -6,11 +6,30 @@
           <h1 class="text-white fw-bold">¿Quien está viendo ahora?</h1>
           <div class="w-100">
             {{#if profiles}}
+            <div class="container mt-5" id="profilesSelector">
+              <div class="row justify-content-center">
+                {{#each profiles}}
+                <div class="col-md-2">
+                  <a href="/profiles/{{_id}}">
+                    <img src="{{avatar}}" class="img-fluid rounded-circle profile-selection" alt="profile image">
+                    <h4 class="text-white mt-2 profile-selection-text rounded font-weight-bold">{{name}}</h4>
+                  </a>
+                  <!-- add a delete and edit button -->
+                  <div class="text-center mt-4">
+                      <a href="/profiles/edit/{{_id}}" class="btn btn-outline-warning btn-sm px-2" title="Editar perfil"><i class="material-icons">edit</i></a>
+                      <a href="javascript:deleteProfile('{{_id}}', '{{name}}')" class="btn btn-outline-danger btn-sm px-2" title="Eliminar perfil"><i class="material-icons">delete</i></a>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
             {{else}}
             <div class="w-100 text-center mt-5">
               <h2 class="text-muted mb-4 mt-4">Parece que aún no has creado ningún perfil</h2>
-              <a href="/profiles/new" class="btn btn-primary mt-5">Crear perfil</a>
             </div>
+            {{/if}}
+            {{#if showCreateProfile}}
+              <a href="/profiles/new" class="btn btn-primary mt-5">Crear perfil</a>
             {{/if}}
           </div>
         </div>
@@ -21,5 +40,6 @@
   {{>corescripts}}
 
   <script src="/js/plugins/sweetalert2.js"></script>
+  <script src="/js/controls/profileSelector.js"></script>
 
 </body>

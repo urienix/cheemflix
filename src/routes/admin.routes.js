@@ -15,10 +15,6 @@ router
         return res.redirect('/login');
     })
 
-    .get('/admin/home', checkSessionView, refreshAccessTokenView, async (req, res) => {
-        return res.render('admin/movies');
-    })
-
     .get('/movies', checkSessionView, refreshAccessTokenView, async (req, res) => {
         return res.render('client/movies');
     })

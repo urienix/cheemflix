@@ -22699,3 +22699,12 @@ h2.title {
   color: #f44336;
   font-size: 40px;
 }
+
+.avatar-selection{
+  height: 95;
+  object-fit: scale-down;
+}
+
+.avatar-selection:hover{
+  box-shadow: aquamarine 0px 0px 10px;
+}

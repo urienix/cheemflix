@@ -1,0 +1,25 @@
+<body class="dark-edition">
+  <div class="wrapper ">
+    <div class="container-fluid h-100">
+      <div style="padding-top: 20vh;">
+        <div class="text-center">
+          <h1 class="text-white fw-bold">¿Quien está viendo ahora?</h1>
+          <div class="w-100">
+            {{#if profiles}}
+            {{else}}
+            <div class="w-100 text-center mt-5">
+              <h2 class="text-muted mb-4 mt-4">Parece que aún no has creado ningún perfil</h2>
+              <a href="/profiles/new" class="btn btn-primary mt-5">Crear perfil</a>
+            </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{>corescripts}}
+
+  <script src="/js/plugins/sweetalert2.js"></script>
+
+</body>

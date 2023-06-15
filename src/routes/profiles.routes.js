@@ -1,11 +1,11 @@
 import { Router } from 'express';
 const router = Router();
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 
 import { checkSessionView, refreshAccessTokenView, createAccessToken } from "../middlewares/jwtoken";
 import { checkIfUserRolIsAllowed } from "../middlewares/others";
 
-import { saveProfile, getProfiles, deleteProfile } from "../controllers/profiles.controller";
+import { saveProfile, getProfiles, deleteProfile, selectProfile, getProfile } from "../controllers/profiles.controller";
 
 router
     .get('/', checkSessionView, refreshAccessTokenView, async (req, res) => {
@@ -26,6 +26,27 @@ router
 
         return res.render('client/profileForm', { user, formTitle: 'Crear perfil', profile });
     })
+
+    .get('/edit/:profileId', checkSessionView, refreshAccessTokenView, async (req, res) => {
+        const { user } = req;
+        const { profileId } = req.params;
+        let profile = await getProfile(profileId);
+        return res.render('client/profileForm', { user, formTitle: 'Editar perfil', profile });
+    })
+
+    .get('/select/:profileId', checkSessionView, refreshAccessTokenView, [
+        param('profileId').notEmpty().withMessage('El id del perfil es requerido')
+    ], async (req, res, next) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({
+                type: 'error',
+                title: 'Error',
+                message: errors.array()[0].msg
+            });
+        }
+        return next();
+    }, selectProfile)
 
     .post('/', checkSessionView, refreshAccessTokenView, [
         body('profileId').notEmpty().withMessage('El id del perfil es requerido'),

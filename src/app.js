@@ -11,6 +11,23 @@ import { createAdmin } from './libs/createAdmin';
 
 import './controllers/connection'; // Database connection
 
+/*  ########################################
+    ########## Register elements  ##########
+    ########################################
+*/
+
+import { registerCategories } from './libs/registerCategories';
+import { registerMovies } from './libs/registerMovies';
+
+let createMains = async () => {
+    await registerCategories(); 
+    await registerMovies();
+}
+
+createMains();
+
+// ########## End register elements ##########
+
 const app = express();
 
 createAdmin();

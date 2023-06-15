@@ -14,12 +14,20 @@
     <div class="sidebar-wrapper">
         <div class="user">
             <div class="photo">
-                <img src="/img/admin.png" />
+                {{#if profile}}
+                <img src="{{profile.avatar}}" />
+                {{else}}
+                <img src="{{user.avatar}}" />
+                {{/if}}
             </div>
             <div class="user-info">
                 <a data-toggle="collapse" href="#collapseExample" class="username">
                     <span>
+                        {{#if profile}}
+                        {{profile.name}}
+                        {{else}}
                         {{user.fullname}}
+                        {{/if}}
                         <b class="caret"></b>
                     </span>
                 </a>
@@ -305,13 +313,13 @@
             </li>
             {{/notRender}}
             <li class="nav-item">
-                <a class="nav-link" href="/admin/movies">
+                <a class="nav-link" href="/movies">
                     <i class="material-icons">movie</i>
                     <p> Peliculas </p>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/admin/series">
+                <a class="nav-link" href="/series">
                     <i class="material-icons">camera</i>
                     <p> Series </p>
                 </a>

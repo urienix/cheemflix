@@ -59,6 +59,18 @@ export const deleteProfile = async (req, res) => {
     }
 }
 
+export const selectProfile = async (req, res) => {
+    try {
+        const { profileId } = req.params;
+        console.log(profileId);
+        await res.cookie('profileId', profileId, { httpOnly: true });
+        return res.redirect('/home');
+    } catch (error) {
+        logger.error(error.message);
+        return res.redirect('/500');
+    }
+}
+
 // internal functions, used only in other controllers or functions
 
 export const getProfiles = async (userId) => {
@@ -68,5 +80,15 @@ export const getProfiles = async (userId) => {
     } catch (error) {
         logger.error(error.message);
         return [];
+    }
+}
+
+export const getProfile = async (profileId) => {
+    try {
+        let profile = await Profile.findById(profileId).lean();
+        return profile;
+    }catch(error){
+        logger.error(error.message);
+        return null;
     }
 }

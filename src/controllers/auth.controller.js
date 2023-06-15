@@ -55,8 +55,7 @@ export let login = async function (email, password, remember) {
         let user = {
             userId: result._id.toString(),
             role: result.role,
-            fullname: result.fullname,
-            profile: ''
+            fullname: result.fullname
         };
 
         let session = await Session({

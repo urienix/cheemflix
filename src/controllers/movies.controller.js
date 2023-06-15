@@ -59,3 +59,20 @@ export const getMovie = async (req, res) => {
         });
     }
 }
+
+
+// internal functions, will be used only on other controllers
+export const getMoviesList = async (isKid) => {
+    try{
+        let movies = [];
+        if(isKid) {
+            movies = await Movie.find({allowKids: true}).populate('categories').lean();
+        } else {
+            movies = await Movie.find({}).populate('categories').lean();
+        }
+        return movies;
+    } catch (error) {
+        logger.error(error);
+        return [];
+    }
+}

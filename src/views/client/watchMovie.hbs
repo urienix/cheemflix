@@ -27,9 +27,11 @@
                             <hr class="bg-white">                            
                             <p><span class="font-weight-bold">Sinopsis: </span> {{movie.sinopsis}}</p>
                             <p><span class="font-weight-bold">Categoría: </span> {{#each movie.categories}} {{name}} {{/each}}</p>
+                            <p><span class="font-weight-bold">Duración: </span> {{movie.duration}} Mins.</p>
                             <p><span class="font-weight-bold">Idioma: </span> {{movie.language}}</p>
                             <p><span class="font-weight-bold">Actores: </span> {{#each movie.cast}} {{this}} {{/each}}</p>
                             <p><span class="font-weight-bold">Clasificación: </span> {{#if movie.allowKids}}<span class="badge badge-success">Todo publico</span>{{else}}<span class="badge badge-warning">Adultos</span>{{/if}}</p>
+                            <p><span class="font-weight-bold">Calificación: </span> {{movie.rating}}</p>
                         </div>
                     </div>
                   </div>

@@ -5,6 +5,8 @@ import { checkIfUserRolIsAllowed, checkIfUserHaveSelectedProfile } from "../midd
 
 import { getMoviesList, getMovieById } from "../controllers/movies.controller";
 
+import { savePlaybackHistory } from "../controllers/playback.controller";
+
 const router = Router();
 
 router
@@ -17,8 +19,10 @@ router
 
     .get('/:movieId', checkSessionView, refreshAccessTokenView, checkIfUserHaveSelectedProfile, checkIfUserRolIsAllowed(['user']), async (req, res) => {
         const { user, profile } = req;
-        let movie = await getMovieById(req.params.movieId);
+        const { movieId } = req.params;
+        let movie = await getMovieById(movieId);
         if (!movie.allowKids && profile.isKid) return res.status(403).redirect('/403');
+        await savePlaybackHistory(profile.profileId, movie._id.toString()); // Save playback history
         return res.render('client/watchMovie', { user, profile, movie });
     });
 

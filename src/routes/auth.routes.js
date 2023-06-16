@@ -11,9 +11,10 @@ const router = Router();
 router
 
     .get('/login', async (req, res) => {
-        let { accesstoken, sessiontoken, io } = req.cookies;
+        let { accesstoken, sessiontoken, profileId } = req.cookies;
         if(sessiontoken) res.clearCookie('sessiontoken');
         if(accesstoken) res.clearCookie('accesstoken');
+        if(profileId) res.clearCookie('profileId');
         return res.render('auth/login');
     })
 

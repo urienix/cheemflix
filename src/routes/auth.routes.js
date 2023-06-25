@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { login, register, verify } from "../controllers/auth.controller";
+import { login, register, verify, passwordReset, passwordResetVerify } from "../controllers/auth.controller";
 import { body, param, validationResult } from "express-validator";
 import ms from 'ms';
 import config from '../config/config';
@@ -95,5 +95,48 @@ router
         }
         return next();
     }, verify)
+
+    .post('/password_reset', [
+        body('email')
+            .not().isEmpty().withMessage('Email de usuario requerido')
+            .isEmail().withMessage('Email de usuario invalido'),
+    ], (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                type: 'error',
+                title: errors.array()[0].msg,
+                details: errors.array()[0].msg
+            });
+        }
+        return next();
+    }, passwordReset)
+
+    .post('/password_reset_verify', [
+        body('email')
+            .not().isEmpty().withMessage('Email de usuario requerido')
+            .isEmail().withMessage('Email de usuario invalido'),
+        body('passwordResetToken')
+            .not().isEmpty().withMessage('Token de recuperación de contraseña requerido')
+            .isLength({ min: 5, max: 50 }).withMessage('Token de recuperación de contraseña debe tener entre 5 y 50 caracteres'),
+        body('password')
+            .not().isEmpty().withMessage('Contraseña requerida')
+            .isLength({ min: 5, max: 20 }).withMessage('Contraseña debe tener entre 5 y 20 caracteres'),
+        body('repassword')
+            .not().isEmpty().withMessage('Confirmación de contraseña requerida')
+            .isLength({ min: 5, max: 20 }).withMessage('Confirmación de contraseña debe tener entre 5 y 20 caracteres'),
+    ], (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).send({
+                type: 'error',
+                title: errors.array()[0].msg,
+                details: errors.array()[0].msg
+            });
+        }
+        return next();
+    }, passwordResetVerify)
+
+
 
 export default router;

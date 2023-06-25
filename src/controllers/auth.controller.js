@@ -5,7 +5,7 @@ import { createAccessToken, createSessionToken, verifySessionToken } from "../mi
 import config from "../config/config";
 import logger from "../utils/logger";
 
-import { sendMail, buildMailTemplate } from "../utils/sendMail";
+import { sendMail, buildMailTemplate, buildRecoveryPasswordMailTemplate } from "../utils/sendMail";
 
 // requestedFrom is used to know if the request is from api or web, only have two posible values: api or web
 export let login = async function (email, password, remember) {
@@ -151,5 +151,98 @@ export let verify = async (req, res) => {
     } catch (error) {
         logger.error(error);
         return res.render('others/message', { title: 'Error desconocido', message: 'Se ha producido un error desconocido, por favor intenta de nuevo más tarde.', type:'danger', link: `${config.HOST_DOMAIN}/login`, linkText: 'Volver al login'});        
+    }
+}
+
+
+export let passwordReset = async (req, res) => {
+    let { email } = req.body;
+    email = email.trim();
+    try {
+        let user = await User.findOne({ email });
+        if(!user) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Email no registrado",
+                message: "El email no se encuentra registrado, por favor intenta con otro."
+            });
+        }
+        let securityCode = Math.floor(100000 + Math.random() * 900000);
+        user.passwordResetToken = securityCode;
+        user.passwordResetExpires = new Date(Date.now() + ms('1h'));
+        await user.save();
+        
+        sendMail(email, "Codigo para reestablecer contraseña de CheemFlix", buildRecoveryPasswordMailTemplate(user.fullname, securityCode));
+
+        return res.status(200).send({
+            type: 'success',
+            title: "Correo enviado",
+            message: "Se ha enviado un correo electrónico para restablecer tu contraseña."
+        });
+    } catch (error) {
+        logger.error(error);
+        return res.status(500).send({
+            ok: false,
+            type: 'error',
+            title: "Error desconocido",
+            message: "Se ha producido un error desconocido, por favor intenta de nuevo más tarde."
+        });        
+    }
+}
+
+export let passwordResetVerify = async (req, res) => {
+    let { email, passwordResetToken, password, repassword } = req.body;
+    console.log(req.body);
+    try {
+        let user = await User.findOne({ email });
+        if(!user) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Email no registrado",
+                message: "El email no se encuentra registrado, por favor intenta con otro."
+            });
+        }
+        if(user.passwordResetToken !== passwordResetToken) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Código incorrecto",
+                message: "El código de seguridad es incorrecto, por favor verifica e intenta de nuevo."
+            });
+        }
+        if (password !== repassword) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Contraseñas no coinciden",
+                message: "Las contraseñas no coinciden, por favor verifica e intenta de nuevo."
+            });
+        }
+        if(user.passwordResetExpires < new Date()) {
+            return res.status(400).send({
+                ok: false,
+                type: 'error',
+                title: "Código expirado",
+                message: "El código de seguridad ha expirado, por favor intenta de nuevo."
+            });
+        }
+        user.password = await user.encryptPassword(password);
+        user.passwordResetToken = null;
+        user.passwordResetExpires = null;
+        await user.save();
+        return res.status(200).send({
+            type: 'success',
+            title: "Contraseña actualizada",
+            message: "La contraseña ha sido actualizada, puedes iniciar sesión."
+        });
+    } catch (error) {
+        logger.error(error.message);
+        return res.status(500).send({
+            type: 'error',
+            title: "Error desconocido",
+            message: "Se ha producido un error desconocido, por favor intenta de nuevo más tarde."
+        });        
     }
 }

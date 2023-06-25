@@ -39,3 +39,21 @@ export function buildMailTemplate(fullname, link){
             </div>
             `;
 }
+
+export function buildRecoveryPasswordMailTemplate(fullname, code){
+    return `<div style="background-color: #f2f2f2; padding: 20px;">
+                <div style="background-color: #fff; padding: 20px; border-radius: 5px; max-width: 500px; margin: 0 auto;">
+                    <div style="text-align: center;">
+                        <img src="${config.HOST_DOMAIN}/img/cheems-logo.png" alt="Logo" style="width: 150px;">
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <h1 style="font-size: 1.5rem; font-weight: 600; color: #333;">${fullname}</h1>
+                        <p style="font-size: 1rem; font-weight: 400; color: #333;">Código de recuperación de contraseña:</p>
+                        <h2 style="font-size: 1.5rem; font-weight: 600; color: #333;">${code}</h2>
+                        <br>
+                        <p style="font-size: 1rem; font-weight: 400; color: #333;">Este código expirará en 60 minutos.</p>
+                    </div>
+                </div>
+            </div>
+            `;
+}
